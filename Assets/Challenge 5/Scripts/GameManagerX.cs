@@ -76,14 +76,16 @@ public class GameManagerX : MonoBehaviour
     // Stop game, bring up game over text and restart button
     public void GameOver()
     {
+
         gameOverText.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(true);
         isGameActive = false;
     }
 
     // Restart game by reloading the scene
     public void RestartGame()
     {
+      
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
