@@ -9,15 +9,16 @@ public class GameManagerX : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI timeText;
     public GameObject titleScreen;
     public Button restartButton; 
 
     public List<GameObject> targetPrefabs;
-
+    private float timer;
     private int score;
     private float spawnRate = 1.5f;
     public bool isGameActive;
-
+    public bool timerIsRunning = false;
     private float spaceBetweenSquares = 2.5f; 
     private float minValueX = -3.75f; //  x value of the center of the left-most square
     private float minValueY = -3.75f; //  y value of the center of the bottom-most square
@@ -25,10 +26,12 @@ public class GameManagerX : MonoBehaviour
     // Start the game, remove title screen, reset score, and adjust spawnRate based on difficulty button clicked
     public void StartGame(int difficulty)
     {
+        timerIsRunning = true;
         spawnRate /= difficulty;
         isGameActive = true;
         StartCoroutine(SpawnTarget());
         score = 0;
+        timer = 60;
         UpdateScore(0);
         titleScreen.SetActive(false);
     }
@@ -49,6 +52,28 @@ public class GameManagerX : MonoBehaviour
         }
     }
 
+    //add a minute timer that ends the game once time runs out
+    void Update()
+    {
+        if (timerIsRunning)
+        {
+            timeText.text = "time: " + timer;
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                Debug.Log("Time has ran out");
+                timer = 0;
+                timerIsRunning = false;
+                gameOverText.gameObject.SetActive(true);
+                restartButton.gameObject.SetActive(true);
+                isGameActive = false;
+            }
+        }
+
+    }
     // Generate a random spawn position based on a random index from 0 to 3
     Vector3 RandomSpawnPosition()
     {
@@ -71,6 +96,7 @@ public class GameManagerX : MonoBehaviour
     {
         score += scoreToAdd;
         scoreText.text = "score: " + score;
+
     }
 
     // Stop game, bring up game over text and restart button
