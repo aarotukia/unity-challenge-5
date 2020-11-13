@@ -106,6 +106,7 @@ public class GameManagerX : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         restartButton.gameObject.SetActive(true);
         isGameActive = false;
+        timer = 0;
     }
 
     // Restart game by reloading the scene
